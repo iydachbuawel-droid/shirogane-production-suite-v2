@@ -274,8 +274,7 @@ window.downloadPreviewPdf=async (element,invoice,button)=>{
   if(button){button.disabled=true;button.textContent='Menyiapkan PDF…';}
   const name=`Nota-${String(invoice||'SHIROGANE').replace(/[^a-zA-Z0-9_-]/g,'-')}.pdf`;
   await window.SHROGANE_downloadPreviewPdf(element,name);
-  try{logActivity('Download PDF',invoice)}catch{}
-  toast('PDF berhasil diunduh.');
+  toast('Dialog cetak dibuka. Pilih “Simpan sebagai PDF” untuk menyimpan nota.');
  }catch(err){console.error('Download PDF gagal:',err);toast('PDF gagal dibuat: '+(err?.message||'Coba lagi.'));}
  finally{if(button){button.disabled=false;button.textContent=oldText||'📄 Download PDF';}}
 };
@@ -311,7 +310,7 @@ window.printOrder=(id,type)=>{
   ? `<div class="preview-toolbar no-print"><button onclick="window.print()">🖨 Print Thermal</button><button onclick="window.close()">✕ Tutup</button></div>`
   : `<div class="preview-toolbar no-print"><button onclick="window.print()">🖨 Print</button><button class="pdf-button" onclick="saveSamePreviewPDF()">📄 Download PDF</button><button onclick="window.close()">✕ Tutup</button><span id="pdfStatus"></span></div>`;
  w.document.open();
- w.document.write(`<!doctype html><html><head><meta charset="utf-8"><base href="${new URL('.',location.href).href}"><title>${esc(o.invoice)}</title><link rel="stylesheet" href="styles.css?v=3.0.15"><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script><script src="preview-pdf.js?v=3.0.15"><\/script><style>
+ w.document.write(`<!doctype html><html><head><meta charset="utf-8"><base href="${new URL('.',location.href).href}"><title>${esc(o.invoice)}</title><link rel="stylesheet" href="styles.css?v=4.0.0"><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script><script src="preview-pdf.js?v=4.0.0"><\/script><style>
  @page{size:${isThermal?'80mm auto':'A4 portrait'};margin:${isThermal?'3mm':'10mm'}}
  *{box-sizing:border-box}body{margin:0;background:#eef2f7}.preview-toolbar{position:sticky;top:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;background:#111827;box-shadow:0 4px 18px rgba(0,0,0,.2)}.preview-toolbar button{border:0;border-radius:9px;padding:10px 16px;background:#fff;color:#111827;font-weight:800;cursor:pointer}.preview-toolbar .pdf-button{background:#dc2626;color:#fff}.preview-toolbar #pdfStatus{color:#fff;font-size:12px}.print-area{background:#fff;margin:18px auto}.pdf-export .preview-toolbar{display:none!important}@media print{body{background:#fff}.preview-toolbar{display:none!important}.print-area{margin:0 auto!important}}
  </style></head><body>${toolbar}<div class="print-area ${isThermal?'thermal-print':'f4-print'}">${receiptHTML(o)}</div><script>
@@ -319,13 +318,13 @@ window.printOrder=(id,type)=>{
  const orderId=${orderIdJSON};
  async function saveSamePreviewPDF(){
    const status=document.getElementById('pdfStatus');
-   // v3.0.15: selalu salin area preview yang terlihat ke PDF.
-   // Jangan gunakan printToPDF Electron karena ukuran halaman print dapat membelah nota.
+   // Ekspor menggunakan tata letak HTML yang sama melalui dialog cetak browser.
+   // Teks tetap dapat dipilih dan disalin; pengguna memilih Simpan sebagai PDF.
    const area=document.querySelector('.print-area');
    if(typeof window.SHROGANE_downloadPreviewPdf==='function' && area){
-     if(status)status.textContent='Mengunduh PDF...';
+     if(status)status.textContent='Menyiapkan dialog cetak...';
      await window.SHROGANE_downloadPreviewPdf(area,'Nota-'+String(invoiceName).replace(/[^a-zA-Z0-9_-]/g,'-')+'.pdf');
-     if(status)status.textContent='PDF berhasil diunduh';
+     if(status)status.textContent='Dialog cetak dibuka — pilih Simpan sebagai PDF.';
      return;
    }
    alert('Generator PDF belum siap. Pastikan internet aktif lalu muat ulang.');

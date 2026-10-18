@@ -1,4 +1,4 @@
 {
-  "version": "3.0.20",
-  "notes": "Business logo cloud sync: logo usaha disimpan di Supabase Storage dan otomatis dipulihkan setelah login/install ulang"
+  "version": "4.0.0",
+  "notes": "Ekspor PDF memakai tata letak nota asli melalui dialog cetak browser; teks dapat dipilih dan disalin."
 }
