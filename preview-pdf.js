@@ -65,6 +65,14 @@
       tr, .totals, .summary, .payment, .payment-bank, .public-receipt-summary,
       .public-receipt-bank, .design, .thumb { break-inside:avoid; page-break-inside:avoid; }
       img { max-width:100%; }
+      /* Keep attached design previews compact so the receipt's closing line stays on page 1. */
+      .f4-print .thumbs { margin-top:6px !important; gap:6px !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+      .f4-print .thumbs .thumb { height:130px !important; max-height:130px !important; aspect-ratio:auto !important; padding:4px !important; break-inside:avoid; page-break-inside:avoid; }
+      .f4-print .thumbs .thumb img { width:100% !important; height:100% !important; object-fit:contain !important; }
+      .f4-print > .preview > p:last-child { margin-top:7px !important; }
+      .public-receipt-designs { margin-top:6px !important; gap:6px !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+      .public-receipt-designs figure { height:130px !important; max-height:130px !important; padding:4px !important; break-inside:avoid; page-break-inside:avoid; }
+      .public-receipt-sheet footer { margin-top:7px !important; }
     `;
     doc.head.appendChild(printStyle);
 

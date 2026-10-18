@@ -1,4 +1,4 @@
 {
-  "version": "4.0.0",
-  "notes": "Ekspor PDF memakai tata letak nota asli melalui dialog cetak browser; teks dapat dipilih dan disalin."
+  "version": "4.0.1",
+  "notes": "Perbaikan ekspor PDF satu halaman A4; gambar desain dipadatkan saat cetak agar bagian penutup tetap di halaman pertama."
 }
